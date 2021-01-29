@@ -1,7 +1,7 @@
 import { Card, CardActionArea, CardContent, CardMedia, Grid, makeStyles, Typography } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { getMovies, getSearchMovie, incPage } from "../../store/actions";
+import { changePagination, changeStatus, clearList, clearSearchList, getMovies, getSearchMovies, incPage, setMaxPage, setPage } from "../../store/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,9 +29,8 @@ const useStyles = makeStyles((theme) => ({
 
 const MoviesList = () => {
   const { movies, loading } = useSelector((state) => state.moviesReducer, shallowEqual);
-  const { searching, searchName, searchList } = useSelector((state) => state.searchMovieReducer, shallowEqual);
-  const { page } = useSelector((state) => state.totalReducer, shallowEqual) 
-
+  const { page,max_page } = useSelector((state) => state.totalReducer, shallowEqual) 
+  const {searchName,searchList, searching, pagination} = useSelector((state) => state.searchReducer, shallowEqual);
   const dispatch = useDispatch();
   const classes = useStyles();
 
@@ -46,9 +45,10 @@ const MoviesList = () => {
   };
 
   const getMoviesList = () => {
-    let search = searching ? searchList : movies;
-    
-    return search.map((item) => (
+   
+    let moviesList = searching ? searchList : movies;
+
+    return moviesList.map((item) => (
       <Grid className={classes.items} key={item.id} item xs={12} sm={12} md={6} lg={4} xl={3}>
         <Card className={classes.root}>
           <CardActionArea>
@@ -71,18 +71,19 @@ const MoviesList = () => {
     ));
   };
 
-  console.log(searchList);
-
   useEffect(() => {
-    if (!searching) {
+    if (searchName === "") {
       dispatch(getMovies(page));
-      return;
+      dispatch(changeStatus(false));
+      dispatch(clearSearchList());
     }
-    else {
-      dispatch(getSearchMovie(searchName,page))
+    if (searchName !== "") {
+      dispatch(clearList());
+      dispatch(changeStatus(true));
+      dispatch(getSearchMovies(page,searchName,pagination,max_page))
     }
-  }, [ page ]);
-
+  }, [ page, searchName]);
+    
   return (
     <Grid className={classes.cont} container direction="row" justify="space-between" alignItems="center">
       {getMoviesList()}

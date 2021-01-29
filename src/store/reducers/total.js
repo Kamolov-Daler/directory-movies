@@ -1,4 +1,4 @@
-import { INC_PAGE, SET_PAGE } from "../actions";
+import { INC_PAGE, SET_MAX_PAGE, SET_PAGE } from "../actions";
 
 const initialData = {
   page: 1,
@@ -11,6 +11,8 @@ const totalReducer = (state = initialData, action) => {
       return { ...state, page: state.page + 1 };
     case SET_PAGE:
       return { ...state, page: action.payload };
+    case SET_MAX_PAGE:
+      return {...state, max_page: action.payload} 
     default:
       return state;
   }

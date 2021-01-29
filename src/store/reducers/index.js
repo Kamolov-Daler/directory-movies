@@ -1,9 +1,10 @@
 import { combineReducers } from "redux";
 import moviesReducer from "./moviesList";
-import searchMovieReducer from "./searchMovie";
+import searchReducer from "./searchList";
 import totalReducer from "./total";
+
 export const reducer = combineReducers({
     moviesReducer,
-    searchMovieReducer,
+    searchReducer,
     totalReducer
 });
