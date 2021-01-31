@@ -1,5 +1,5 @@
 import { AppBar, IconButton, makeStyles, fade, Toolbar, Typography, InputBase } from "@material-ui/core";
-import React from "react";
+import React, {useEffect} from "react";
 import moviesIcon from "../../assets/film-roll.svg";
 import SearchIcon from "@material-ui/icons/Search";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
@@ -62,14 +62,9 @@ const Header = () => {
   const {searchName} = useSelector((state) => state.searchReducer, shallowEqual) 
 
   const handleChange = (e) => {
-    if (searchName !== "") {
-      dispatch(setPage(1));
-      dispatch(setMaxPage(1))
-      dispatch(changePagination(false));
-    }  
     dispatch(changeSearchName(e.target.value));
-      
   };
+
 
   return (
     <div className={classes.root}>

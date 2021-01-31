@@ -108,7 +108,7 @@ export const changePagination = (bool) => {
 }
 
 
-export const getMovies = (page) => {
+export const getMovies = (page = 1) => {
   return async function (dispatch) {
     dispatch(changeLoader(true));
     try {
@@ -137,12 +137,12 @@ export const getMovies = (page) => {
 
 export const getSearchMovies = (page, searchName, pagination, max_page) => {
   return async function (dispatch) {
-      try {
-        if (!pagination) {
+    try {
+      if (!pagination) {
           dispatch(clearSearchList())
           dispatch(changeLoader(true));
           const response = await fetch(
-            `https://api.themoviedb.org/3/search/movie?api_key=f34afb54d9ab14f0bf9d905dc6836800&language=en-US&query=${searchName}&page=${page}`,
+            `https://api.themoviedb.org/3/search/movie?api_key=f34afb54d9ab14f0bf9d905dc6836800&language=en-US&query=${searchName}&page=${1}`,
             {
               method: "GET",
               headers: {
@@ -157,7 +157,7 @@ export const getSearchMovies = (page, searchName, pagination, max_page) => {
           dispatch(changeLoader(false))
           return
         }
-        if (pagination && max_page > page) {
+        if (pagination && max_page >= page) {
           dispatch(changeLoader(true));
           const response = await fetch(
             `https://api.themoviedb.org/3/search/movie?api_key=f34afb54d9ab14f0bf9d905dc6836800&language=en-US&query=${searchName}&page=${page}`,

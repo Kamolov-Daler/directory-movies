@@ -34,13 +34,13 @@ const MoviesList = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  window.onscroll = function () {
+  window.onscroll = () => {
     var offset = window.pageYOffset || document.documentElement.scrollTop,
       windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight,
       progress = Math.floor((offset / windowHeight) * 100);
     if (progress > 90 && !loading) {
-      dispatch(incPage());
-      return;
+       dispatch(incPage());
+        return
     }
   };
 
@@ -72,18 +72,31 @@ const MoviesList = () => {
   };
 
   useEffect(() => {
-    if (searchName === "") {
+    if (!searching) {
       dispatch(getMovies(page));
+    }
+    if (searching) {
+      dispatch(getSearchMovies(page,searchName,pagination,max_page))
+    }
+  }, [ page,searching]);
+
+  useEffect(() => {
+    dispatch(setPage(1));
+    dispatch(setMaxPage(1))
+    dispatch(changePagination(false));
+    if (searchName === "") {
       dispatch(changeStatus(false));
       dispatch(clearSearchList());
     }
     if (searchName !== "") {
       dispatch(clearList());
       dispatch(changeStatus(true));
-      dispatch(getSearchMovies(page,searchName,pagination,max_page))
     }
-  }, [ page, searchName]);
-    
+}, [searchName])
+  
+ 
+
+
   return (
     <Grid className={classes.cont} container direction="row" justify="space-between" alignItems="center">
       {getMoviesList()}

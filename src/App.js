@@ -1,11 +1,12 @@
 import { Box, CircularProgress, Container } from "@material-ui/core";
-import React from "react";
+import React, {useEffect} from "react";
 import "./App.css";
 import { createMuiTheme, makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import MoviesList from "./components/Movies/MoviesList";
 import Header from "./components/Header/Header";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ruRU } from "@material-ui/core/locale";
+import { getMovies, setMaxPage, setPage } from "./store/actions";
 
 const theme = createMuiTheme(
   {
@@ -37,6 +38,10 @@ const useStyles = makeStyles({
 function App() {
   const classes = useStyles();
   const { loading } = useSelector((state) => state.moviesReducer, shallowEqual);
+  const {searching} =  useSelector((state) => state.searchReducer, shallowEqual)
+  const dispatch = useDispatch()
+
+
   return (
     <>
       <ThemeProvider theme={theme}>
