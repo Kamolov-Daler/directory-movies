@@ -72,13 +72,13 @@ const MoviesList = () => {
   };
 
   useEffect(() => {
-    if (!searching) {
+    if (!searching && !loading) {
       dispatch(getMovies(page));
     }
-    if (searching) {
+    if (searching && !loading) {
       dispatch(getSearchMovies(page,searchName,pagination,max_page))
     }
-  }, [ page,searching]);
+  }, [ page,searching,max_page]);
 
   useEffect(() => {
     dispatch(setPage(1));
